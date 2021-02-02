@@ -6,34 +6,38 @@ import {
   LOG_OUT,
 } from './types';
 
-export const loginRequest = (
-  email: string,
-  password: string
-): AccountActionTypes => {
-  return {
-    type: LOGIN_REQUEST,
-    payload: { email: email, password: password },
-  };
-};
+import { Dispatch } from 'react';
+import { history } from '../../helpers';
+import { userService } from '../../services/user.service';
 
-export const loginSuccess = (token: string): AccountActionTypes => {
-  return {
-    type: LOGIN_SUCCESS,
-    payload: { token: token },
-  };
-};
+export const login = (email: string, password: string, from: string) => {
+  return (dispatch: Dispatch<AccountActionTypes>) => {
+    dispatch({
+      type: LOGIN_REQUEST,
+      payload: {
+        email: email,
+        password: password,
+      },
+    });
 
-export const loginFailure = (error: string): AccountActionTypes => {
-  return {
-    type: LOGIN_FAILURE,
-    payload: {
-      error: error,
-    },
+    userService.login(email, password).then(
+      (res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res,
+        });
+        history.push(from);
+      },
+      (error) => {
+        dispatch({
+          type: LOGIN_FAILURE,
+          payload: { error: error.toString() },
+        });
+      }
+    );
   };
 };
 
 export const logout = (): AccountActionTypes => {
-  return {
-    type: LOG_OUT,
-  };
+  return { type: LOG_OUT };
 };
