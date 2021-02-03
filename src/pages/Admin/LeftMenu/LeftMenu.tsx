@@ -1,11 +1,16 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 
 export const LeftMenu = () => {
+  const [isToggled, setIsToggled] = useState(false);
+  const [showPages, setShowPage] = useState(false);
   return (
     <Fragment>
       {/* Sidebar */}
       <ul
-        className='navbar-nav bg-gradient-primary sidebar sidebar-dark accordion'
+        className={
+          'navbar-nav bg-gradient-primary sidebar sidebar-dark accordion' +
+          (isToggled ? ' toggled' : '')
+        }
         id='accordionSidebar'
       >
         {/* Sidebar - Brand */}
@@ -106,11 +111,12 @@ export const LeftMenu = () => {
         {/* Nav Item - Pages Collapse Menu */}
         <li className='nav-item'>
           <a
-            className='nav-link collapsed'
+            onClick={() => setShowPage(!showPages)}
+            className={'nav-link' + (!showPages ? ' collapsed' : '')}
             href='#'
             data-toggle='collapse'
             data-target='#collapsePages'
-            aria-expanded='true'
+            aria-expanded={showPages ? 'true' : 'false'}
             aria-controls='collapsePages'
           >
             <i className='fas fa-fw fa-folder' />
@@ -118,7 +124,7 @@ export const LeftMenu = () => {
           </a>
           <div
             id='collapsePages'
-            className='collapse'
+            className={'collapse' + (showPages ? ' show' : '')}
             aria-labelledby='headingPages'
             data-parent='#accordionSidebar'
           >
@@ -162,25 +168,13 @@ export const LeftMenu = () => {
         <hr className='sidebar-divider d-none d-md-block' />
         {/* Sidebar Toggler (Sidebar) */}
         <div className='text-center d-none d-md-inline'>
-          <button className='rounded-circle border-0' id='sidebarToggle' />
+          <button
+            className='rounded-circle border-0'
+            onClick={() => setIsToggled(!isToggled)}
+            id='sidebarToggle'
+          />
         </div>
         {/* Sidebar Message */}
-        <div className='sidebar-card'>
-          <img
-            className='sidebar-card-illustration mb-2'
-            src='img/undraw_rocket.svg'
-          />
-          <p className='text-center mb-2'>
-            <strong>SB Admin Pro</strong> is packed with premium features,
-            components, and more!
-          </p>
-          <a
-            className='btn btn-success btn-sm'
-            href='https://startbootstrap.com/theme/sb-admin-pro'
-          >
-            Upgrade to Pro!
-          </a>
-        </div>
       </ul>
       {/* End of Sidebar */}
     </Fragment>
