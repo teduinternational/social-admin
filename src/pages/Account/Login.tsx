@@ -1,6 +1,42 @@
-import React from 'react';
+import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { login, logout } from '../../store/account/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { AppState } from '../../store';
+import { useLocation } from 'react-router';
 
 export const Login = () => {
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const loading = useSelector<AppState>((state) => state.account.loading);
+
+  const { email, password } = inputs;
+
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    dispatch(logout());
+  }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInputs((inputs) => ({ ...inputs, [name]: value }));
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
+    if (email && password) {
+      const { from } = location.state || { from: { pathname: '/' } };
+      dispatch(login(email, password, from));
+    }
+  };
+
   return (
     <div className='container'>
       {/* Outer Row */}
@@ -16,59 +52,52 @@ export const Login = () => {
                     <div className='text-center'>
                       <h1 className='h4 text-gray-900 mb-4'>Welcome Back!</h1>
                     </div>
-                    <form className='user'>
+                    <form className='user' onSubmit={handleSubmit}>
                       <div className='form-group'>
                         <input
                           type='email'
-                          className='form-control form-control-user'
+                          className={
+                            'form-control form-control-user ' +
+                            (submitted && !email ? 'is-invalid' : '')
+                          }
                           id='exampleInputEmail'
                           aria-describedby='emailHelp'
+                          onChange={handleChange}
                           placeholder='Enter Email Address...'
+                          name='email'
                         />
+                        {submitted && !email && (
+                          <div className='invalid-feedback'>
+                            Email is required
+                          </div>
+                        )}
                       </div>
                       <div className='form-group'>
                         <input
                           type='password'
-                          className='form-control form-control-user'
+                          className={
+                            'form-control form-control-user ' +
+                            (submitted && !email ? 'is-invalid' : '')
+                          }
                           id='exampleInputPassword'
                           placeholder='Password'
+                          onChange={handleChange}
+                          name='password'
                         />
+                        {submitted && !password && (
+                          <div className='invalid-feedback'>
+                            Password is required
+                          </div>
+                        )}
                       </div>
                       <div className='form-group'>
-                        <div className='custom-control custom-checkbox small'>
-                          <input
-                            type='checkbox'
-                            className='custom-control-input'
-                            id='customCheck'
-                          />
-                          <label
-                            className='custom-control-label'
-                            htmlFor='customCheck'
-                          >
-                            Remember Me
-                          </label>
-                        </div>
+                        <button className='btn btn-primary'>
+                          {loading && (
+                            <span className='spinner-border spinner-border-sm mr-1'></span>
+                          )}
+                          Login
+                        </button>
                       </div>
-                      <a
-                        href='index.html'
-                        className='btn btn-primary btn-user btn-block'
-                      >
-                        Login
-                      </a>
-                      <hr />
-                      <a
-                        href='index.html'
-                        className='btn btn-google btn-user btn-block'
-                      >
-                        <i className='fab fa-google fa-fw' /> Login with Google
-                      </a>
-                      <a
-                        href='index.html'
-                        className='btn btn-facebook btn-user btn-block'
-                      >
-                        <i className='fab fa-facebook-f fa-fw' /> Login with
-                        Facebook
-                      </a>
                     </form>
                     <hr />
                     <div className='text-center'>
