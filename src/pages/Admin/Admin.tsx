@@ -1,9 +1,15 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import { LeftMenu } from './LeftMenu/LeftMenu';
 import { TopBar } from './TopBar/TopBar';
+import { getCurrentLoginUser } from '../../store/account/actions';
+import { useDispatch } from 'react-redux';
 
 export const Admin = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCurrentLoginUser());
+  }, []);
   return (
     <Fragment>
       <LeftMenu />

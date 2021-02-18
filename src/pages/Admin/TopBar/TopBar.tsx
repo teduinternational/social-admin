@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { AppState } from '../../../store';
+import { AuthenticatedUser } from '../../../store/account/types';
 import { logout } from '../../../store/account/actions';
-import { useDispatch } from 'react-redux';
 
 export const TopBar = () => {
   const [isShowProfileDropdown, setIsShowProfileDropdown] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector<AppState>(
+    (state) => state.account.user
+  ) as AuthenticatedUser;
   return (
     <nav className='navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow'>
       {/* Sidebar Toggle (Topbar) */}
@@ -242,12 +247,9 @@ export const TopBar = () => {
             onClick={() => setIsShowProfileDropdown(!isShowProfileDropdown)}
           >
             <span className='mr-2 d-none d-lg-inline text-gray-600 small'>
-              Douglas McGee
+              {user.first_name}
             </span>
-            <img
-              className='img-profile rounded-circle'
-              src='img/undraw_profile.svg'
-            />
+            <img className='img-profile rounded-circle' src={user.avatar} />
           </a>
           {/* Dropdown - User Information */}
           <div

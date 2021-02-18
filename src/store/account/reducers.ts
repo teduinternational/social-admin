@@ -1,6 +1,9 @@
 import {
   AccountActionTypes,
   AccountState,
+  LOAD_CURRENT_LOGIN_USER_FAILURE,
+  LOAD_CURRENT_LOGIN_USER_REQUEST,
+  LOAD_CURRENT_LOGIN_USER_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -40,6 +43,23 @@ const accountReducer = (
         user: null,
         token: null,
         error: null,
+      };
+    }
+    case LOAD_CURRENT_LOGIN_USER_REQUEST: {
+      return { ...state, loading: true };
+    }
+    case LOAD_CURRENT_LOGIN_USER_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        user: action.payload.user,
+      };
+    }
+    case LOAD_CURRENT_LOGIN_USER_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
     }
     default:
