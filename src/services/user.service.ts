@@ -1,3 +1,5 @@
+import { IPagination } from '../helpers/pagination';
+import { IUser } from '../store/users/types';
 import { api } from '../helpers';
 
 const login = async (email: string, password: string) => {
@@ -13,6 +15,19 @@ const getCurrentLoginUser = async (): Promise<any> => {
   });
 };
 
+const getUsersPaging = async (
+  keyword: string,
+  currentPage: number,
+  pageSize: number
+): Promise<IPagination<IUser>> => {
+  const res = await api
+    .get<IPagination<IUser>>(`/v1/users/paging/${currentPage}`)
+    .then((response) => {
+      return response.data;
+    });
+  return res;
+};
+
 const logout = () => {
   sessionStorage.removeItem('user');
 };
@@ -21,4 +36,5 @@ export const userService = {
   login,
   logout,
   getCurrentLoginUser,
+  getUsersPaging,
 };
