@@ -48,3 +48,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 ## Fix chrome redirect
 
 Go to chrome://net-internals/#hsts. Enter 3rdrevolution.com under Delete domain security policies and press the Delete button.
+
+## TypeScript Guide
+
+https://github.com/piotrwitek/react-redux-typescript-guide
