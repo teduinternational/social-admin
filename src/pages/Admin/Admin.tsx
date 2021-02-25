@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { AddUser } from '../Admin/Users/AddUser';
 import { AppState } from '../../store';
+import { EditUser } from './Users/EditUser';
 import { Home } from './Home/Home';
 import { LeftMenu } from './LeftMenu/LeftMenu';
 import { TopBar } from './TopBar/TopBar';
@@ -36,6 +37,9 @@ export const Admin = () => {
               </Route>
               <Route path='/user-add'>
                 <AddUser />
+              </Route>
+              <Route path='/user-edit/:id'>
+                <EditUser />
               </Route>
               <Route path='/'>
                 <Home />
