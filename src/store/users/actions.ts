@@ -8,7 +8,9 @@ import {
   LOAD_USERS_PAGING_SUCCESS,
   UsersActionTypes,
 } from './types';
+import { alertError, alertSuccess, clearAlert } from '../alert/actions';
 
+import { AlertActionTypes } from './../alert/types';
 import { Dispatch } from 'redux';
 import { UrlConstants } from '../../constants';
 import { history } from '../../helpers';
@@ -37,7 +39,7 @@ export const loadUsersPaging = (keyword: string, currentPage: number) => {
 };
 
 export const addUser = (user: IAddUserRequest) => {
-  return async (dispatch: Dispatch<UsersActionTypes>) => {
+  return async (dispatch: Dispatch<UsersActionTypes | AlertActionTypes>) => {
     try {
       dispatch({
         type: ADD_USER_REQUEST,
@@ -48,12 +50,19 @@ export const addUser = (user: IAddUserRequest) => {
       dispatch({
         type: ADD_USER_SUCCESS,
       });
+
+      dispatch(alertSuccess('Thêm người dùng thành công'));
+
       history.push(UrlConstants.USERS_LIST);
     } catch (error) {
       dispatch({
         type: ADD_USER_FAILURE,
         payload: { error: error.toString() },
       });
+      dispatch(alertError('Thêm người dùng thất bại'));
     }
+    setTimeout(() => {
+      dispatch(clearAlert());
+    }, 3000);
   };
 };

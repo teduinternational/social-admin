@@ -2,6 +2,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
 
 import { accountReducer } from './account/reducers';
+import { alertReducer } from './alert/reducers';
 import { setAuthToken } from '../helpers';
 import storage from 'redux-persist/lib/storage';
 import thunkMiddleware from 'redux-thunk';
@@ -16,6 +17,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   account: accountReducer,
   users: usersReducer,
+  alert: alertReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
