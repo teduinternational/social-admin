@@ -10,10 +10,9 @@ import {
 } from './types';
 
 import { Dispatch } from 'react';
-import { history } from '../../helpers';
 import { userService } from './../../services/user.service';
 
-export const login = (email: string, password: string, from: string) => {
+export const login = (email: string, password: string) => {
   return async (dispatch: Dispatch<AccountActionTypes>) => {
     dispatch({
       type: LOGIN_REQUEST,
@@ -29,7 +28,6 @@ export const login = (email: string, password: string, from: string) => {
         type: LOGIN_SUCCESS,
         payload: response,
       });
-      history.push(from);
     } catch (error) {
       dispatch({
         type: LOGIN_FAILURE,
