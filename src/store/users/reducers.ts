@@ -1,4 +1,7 @@
 import {
+  ADD_USER_FAILURE,
+  ADD_USER_REQUEST,
+  ADD_USER_SUCCESS,
   LOAD_USERS_PAGING_FAILURE,
   LOAD_USERS_PAGING_REQUEST,
   LOAD_USERS_PAGING_SUCCESS,
@@ -39,6 +42,27 @@ const usersReducer = (
       };
     }
     case LOAD_USERS_PAGING_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+    }
+
+    case ADD_USER_REQUEST: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case ADD_USER_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        error: null,
+      };
+    }
+    case ADD_USER_FAILURE: {
       return {
         ...state,
         loading: false,

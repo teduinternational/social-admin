@@ -1,4 +1,5 @@
 import './index.css';
+import './assets/font-awesome/css/all.min.css';
 
 import { persistedStore, store } from './store';
 

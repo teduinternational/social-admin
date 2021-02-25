@@ -21,7 +21,7 @@ export const Login = () => {
 
   useEffect(() => {
     dispatch(logout());
-  }, []);
+  }, [dispatch]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -32,8 +32,7 @@ export const Login = () => {
     e.preventDefault();
     setSubmitted(true);
     if (email && password) {
-      const { from } = location.state || { from: { pathname: '/' } };
-      dispatch(login(email, password, from));
+      dispatch(login(email, password, location.pathname));
     }
   };
 
