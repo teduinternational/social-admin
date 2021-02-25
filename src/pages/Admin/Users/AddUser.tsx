@@ -6,6 +6,7 @@ import { IAddUserRequest } from '../../../store/users/types';
 import { Link } from 'react-router-dom';
 import { UrlConstants } from '../../../constants';
 import { addUser } from '../../../store/users/actions';
+import { validateEmail } from '../../../helpers';
 
 export const AddUser = () => {
   const [formInputs, setFormInputs] = useState({
@@ -49,10 +50,12 @@ export const AddUser = () => {
             <div className='form-group'>
               <label>Email</label>
               <input
-                type='email'
+                type='text'
                 className={
                   'form-control ' +
-                  (formSubmitted && !email ? 'is-invalid' : '')
+                  (formSubmitted && (!email || !validateEmail(email))
+                    ? 'is-invalid'
+                    : '')
                 }
                 name='email'
                 placeholder='name@example.com'
@@ -60,6 +63,9 @@ export const AddUser = () => {
               />
               {formSubmitted && !email && (
                 <div className='invalid-feedback'>Email is required</div>
+              )}
+              {formSubmitted && !validateEmail(email) && (
+                <div className='invalid-feedback'>Email is not valid</div>
               )}
             </div>
             <div className='form-group'>
