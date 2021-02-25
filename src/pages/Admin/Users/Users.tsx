@@ -41,6 +41,9 @@ export const Users = () => {
         <td>{user.first_name}</td>
         <td>{user.last_name}</td>
         <td>{user.email}</td>
+        <td>
+          <Link to={UrlConstants.USER_EDIT + user._id}>Sửa</Link>
+        </td>
       </tr>
     );
   });
@@ -132,6 +135,7 @@ export const Users = () => {
                     <th>Tên</th>
                     <th>Họ</th>
                     <th>Email</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>{userElements}</tbody>

@@ -2,10 +2,17 @@ import {
   ADD_USER_FAILURE,
   ADD_USER_REQUEST,
   ADD_USER_SUCCESS,
+  GET_USER_BY_ID_FAILURE,
+  GET_USER_BY_ID_REQUEST,
+  GET_USER_BY_ID_SUCCESS,
   IAddUserRequest,
+  IUpdateUserRequest,
   LOAD_USERS_PAGING_FAILURE,
   LOAD_USERS_PAGING_REQUEST,
   LOAD_USERS_PAGING_SUCCESS,
+  UPDATE_USER_FAILURE,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
   UsersActionTypes,
 } from './types';
 import { alertError, alertSuccess, clearAlert } from '../alert/actions';
@@ -64,5 +71,58 @@ export const addUser = (user: IAddUserRequest) => {
     setTimeout(() => {
       dispatch(clearAlert());
     }, 3000);
+  };
+};
+
+export const updateUser = (id: string, user: IUpdateUserRequest) => {
+  return async (dispatch: Dispatch<UsersActionTypes | AlertActionTypes>) => {
+    try {
+      dispatch({
+        type: UPDATE_USER_REQUEST,
+      });
+
+      await userService.updateUser(id, user);
+
+      dispatch({
+        type: UPDATE_USER_SUCCESS,
+      });
+
+      dispatch(alertSuccess('Cập nhật người dùng thành công'));
+
+      history.push(UrlConstants.USERS_LIST);
+    } catch (error) {
+      dispatch({
+        type: UPDATE_USER_FAILURE,
+        payload: { error: error.toString() },
+      });
+      dispatch(alertError('Cập nhật người dùng thất bại'));
+    }
+    setTimeout(() => {
+      dispatch(clearAlert());
+    }, 3000);
+  };
+};
+
+export const getUserById = (id: string) => {
+  return async (dispatch: Dispatch<UsersActionTypes>) => {
+    try {
+      dispatch({
+        type: GET_USER_BY_ID_REQUEST,
+      });
+
+      const res = await userService.getUserById(id);
+
+      dispatch({
+        type: GET_USER_BY_ID_SUCCESS,
+        payload: {
+          user: res,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: GET_USER_BY_ID_FAILURE,
+        payload: { error: error.toString() },
+      });
+    }
   };
 };
