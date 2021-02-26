@@ -2,6 +2,9 @@ import {
   ADD_USER_FAILURE,
   ADD_USER_REQUEST,
   ADD_USER_SUCCESS,
+  DELETE_USERS_FAILURE,
+  DELETE_USERS_REQUEST,
+  DELETE_USERS_SUCCESS,
   GET_USER_BY_ID_FAILURE,
   GET_USER_BY_ID_REQUEST,
   GET_USER_BY_ID_SUCCESS,
@@ -15,10 +18,11 @@ import {
   UPDATE_USER_SUCCESS,
   UsersActionTypes,
 } from './types';
+import { AnyAction, Dispatch } from 'redux';
 import { alertError, alertSuccess, clearAlert } from '../alert/actions';
 
 import { AlertActionTypes } from './../alert/types';
-import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { UrlConstants } from '../../constants';
 import { history } from '../../helpers';
 import { userService } from '../../services';
@@ -121,6 +125,28 @@ export const getUserById = (id: string) => {
     } catch (error) {
       dispatch({
         type: GET_USER_BY_ID_FAILURE,
+        payload: { error: error.toString() },
+      });
+    }
+  };
+};
+
+export const deleteUsers = (userIds: string[]) => {
+  return async (dispatch: ThunkDispatch<any, any, AnyAction>) => {
+    try {
+      dispatch({
+        type: DELETE_USERS_REQUEST,
+      });
+
+      await userService.deleteUsers(userIds);
+
+      dispatch({
+        type: DELETE_USERS_SUCCESS,
+      });
+      dispatch(loadUsersPaging('', 1));
+    } catch (error) {
+      dispatch({
+        type: DELETE_USERS_FAILURE,
         payload: { error: error.toString() },
       });
     }

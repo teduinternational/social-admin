@@ -3,3 +3,10 @@
   right: 10px;
   top: 8px;
 }
+.header-buttons .btn {
+  margin-right: 0.2rem;
+}
+
+.selected {
+  background-color: #eff0f3;
+}
