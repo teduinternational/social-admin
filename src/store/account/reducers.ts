@@ -8,12 +8,16 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOG_OUT,
+  REFRESH_TOKEN_FAILURE,
+  REFRESH_TOKEN_REQUEST,
+  REFRESH_TOKEN_SUCCESS,
 } from './types';
 const initialState: AccountState = {
   user: null,
   loading: false,
   error: null,
   token: null,
+  refreshToken: null,
 };
 const accountReducer = (
   state: AccountState = initialState,
@@ -56,6 +60,24 @@ const accountReducer = (
       };
     }
     case LOAD_CURRENT_LOGIN_USER_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+    }
+    case REFRESH_TOKEN_REQUEST: {
+      return { ...state, loading: true };
+    }
+    case REFRESH_TOKEN_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        token: action.payload.token,
+        refreshToken: action.payload.refreshToken,
+      };
+    }
+    case REFRESH_TOKEN_FAILURE: {
       return {
         ...state,
         loading: false,
