@@ -9,7 +9,9 @@ import { Home } from './Home/Home';
 import { LeftMenu } from './LeftMenu/LeftMenu';
 import { TopBar } from './TopBar/TopBar';
 import { Users } from './Users/Users';
+import env from 'react-dotenv';
 import { getCurrentLoginUser } from '../../store/account/actions';
+import socketIoClient from 'socket.io-client';
 
 export const Admin = () => {
   const dispatch = useDispatch();
@@ -17,6 +19,17 @@ export const Admin = () => {
   useEffect(() => {
     dispatch(getCurrentLoginUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    const socket = socketIoClient.io(env.API_URL);
+    socket.on('connect', function (data: any) {
+      console.log(data);
+      // <-- this works
+      socket.on('message', function (message: any) {
+        console.log(message);
+      });
+    });
+  });
 
   return (
     <Fragment>
