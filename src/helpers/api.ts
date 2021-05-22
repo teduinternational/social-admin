@@ -72,7 +72,7 @@ api.interceptors.response.use(
                   error: err.toString(),
                 },
               });
-              console.log(err);
+              history.push(UrlConstants.LOGIN);
             });
         } else {
           console.log('Refresh token not available.');
