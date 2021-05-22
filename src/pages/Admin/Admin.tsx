@@ -9,9 +9,11 @@ import { Home } from './Home/Home';
 import { LeftMenu } from './LeftMenu/LeftMenu';
 import { TopBar } from './TopBar/TopBar';
 import { Users } from './Users/Users';
+import { addNotification } from '../../store/notification/actions';
 import env from 'react-dotenv';
 import { getCurrentLoginUser } from '../../store/account/actions';
 import socketIoClient from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 export const Admin = () => {
   const dispatch = useDispatch();
@@ -31,13 +33,19 @@ export const Admin = () => {
       });
 
       socket.on('user_created', function (message: any) {
-        console.log('Created: ' + message);
+        console.log('user_created');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
       });
       socket.on('user_updated', function (message: any) {
-        console.log('Updated:' + message);
+        console.log('user_updated');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
       });
       socket.on('user_deleted', function (message: any) {
-        console.log('Deleted:' + message);
+        console.log('user_deleted');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
       });
     });
   });
