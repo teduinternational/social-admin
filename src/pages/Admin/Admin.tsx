@@ -9,14 +9,46 @@ import { Home } from './Home/Home';
 import { LeftMenu } from './LeftMenu/LeftMenu';
 import { TopBar } from './TopBar/TopBar';
 import { Users } from './Users/Users';
+import { addNotification } from '../../store/notification/actions';
+import env from 'react-dotenv';
 import { getCurrentLoginUser } from '../../store/account/actions';
+import socketIoClient from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 export const Admin = () => {
   const dispatch = useDispatch();
   const alert = useSelector((state: AppState) => state.alert);
+  const userId = useSelector((state: AppState) => state.account.user?._id);
   useEffect(() => {
     dispatch(getCurrentLoginUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    const socket = socketIoClient.io(env.API_URL);
+    socket.on('connect', function (data: any) {
+      socket.emit('login', { userId: userId });
+      // <-- this works
+      socket.on('message', function (message: any) {
+        console.log(message);
+      });
+
+      socket.on('user_created', function (message: any) {
+        console.log('user_created');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
+      });
+      socket.on('user_updated', function (message: any) {
+        console.log('user_updated');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
+      });
+      socket.on('user_deleted', function (message: any) {
+        console.log('user_deleted');
+        const id = uuidv4();
+        dispatch(addNotification(id, message));
+      });
+    });
+  });
 
   return (
     <Fragment>
